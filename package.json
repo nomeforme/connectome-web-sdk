@@ -1,0 +1,29 @@
+{
+  "name": "@connectome/web-sdk",
+  "version": "1.0.0",
+  "description": "Lightweight WebSocket client SDK for connecting to the Connectome web-axon",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./protocol": {
+      "types": "./dist/protocol.d.ts",
+      "import": "./dist/protocol.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["connectome", "websocket", "sdk", "web-axon"],
+  "author": "Connectome Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
