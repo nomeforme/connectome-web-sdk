@@ -54,6 +54,14 @@ export interface ClientListStreams {
   type: 'list_streams';
 }
 
+export interface ClientSetAmbient {
+  type: 'set_ambient';
+  streamId: string;
+  content: string;
+  /** If set, only this agent sees the ambient facet in its system prompt */
+  targetAgentId?: string;
+}
+
 export type ClientPayload =
   | ClientConnect
   | ClientCreateStream
@@ -62,7 +70,8 @@ export type ClientPayload =
   | ClientMessage
   | ClientTyping
   | ClientGetHistory
-  | ClientListStreams;
+  | ClientListStreams
+  | ClientSetAmbient;
 
 // ─── Server → Client ─────────────────────────────────────────────────────────
 
@@ -116,6 +125,14 @@ export interface ServerError {
   code?: string;
 }
 
+export interface ServerUserMessage {
+  type: 'user_message';
+  streamId: string;
+  userName: string;
+  content: string;
+  timestamp: number;
+}
+
 export interface ServerMessageAck {
   type: 'message_ack';
   streamId: string;
@@ -151,6 +168,7 @@ export type ServerPayload =
   | ServerStreamCreated
   | ServerStreamJoined
   | ServerSpeech
+  | ServerUserMessage
   | ServerTyping
   | ServerTypingStop
   | ServerAgents

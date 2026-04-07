@@ -11,6 +11,7 @@ import type {
   ServerWelcome,
   ServerStreamCreated,
   ServerSpeech,
+  ServerUserMessage,
   ServerTyping,
   ServerTypingStop,
   ServerError,
@@ -27,6 +28,7 @@ export type WebSdkEventMap = {
   stream_created: ServerStreamCreated;
   stream_joined: ServerStreamJoined;
   speech: ServerSpeech;
+  user_message: ServerUserMessage;
   typing: ServerTyping;
   typing_stop: ServerTypingStop;
   agents: ServerAgents;
@@ -170,6 +172,10 @@ export class ConnectomeWebClient {
     this.send({ type: 'list_streams' });
   }
 
+  setAmbient(streamId: string, content: string, targetAgentId?: string): void {
+    this.send({ type: 'set_ambient', streamId, content, targetAgentId });
+  }
+
   // ─── Events ───────────────────────────────────────────────────────────
 
   on<K extends keyof WebSdkEventMap>(event: K, listener: Listener<WebSdkEventMap[K]>): () => void {
@@ -213,6 +219,9 @@ export class ConnectomeWebClient {
         break;
       case 'speech':
         this.emit('speech', msg);
+        break;
+      case 'user_message':
+        this.emit('user_message', msg);
         break;
       case 'typing':
         this.emit('typing', msg);
