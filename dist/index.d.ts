@@ -1,0 +1,4 @@
+export { ConnectomeWebClient } from './client.js';
+export type { ConnectomeWebClientConfig, WebSdkEventMap } from './client.js';
+export type { ClientPayload, ClientConnect, ClientCreateStream, ClientJoinStream, ClientLeaveStream, ClientMessage, ClientTyping, ClientGetHistory, ClientListStreams, ClientSetAmbient, ServerPayload, ServerWelcome, ServerStreamCreated, ServerStreamJoined, ServerSpeech, ServerUserMessage, ServerTyping, ServerTypingStop, ServerAgents, ServerError, ServerMessageAck, ServerHistory, ServerStreamList, StreamListEntry, HistoryMessage, AgentInfo, } from './protocol.js';
+//# sourceMappingURL=index.d.ts.map
