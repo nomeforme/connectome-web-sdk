@@ -24,7 +24,7 @@
   "keywords": ["connectome", "websocket", "sdk", "web-axon"],
   "author": "Connectome Team",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "typescript": "^5.7.2"
   }
 }
