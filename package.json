@@ -18,8 +18,7 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
-    "typecheck": "tsc --noEmit",
-    "prepare": "tsc --build"
+    "typecheck": "tsc --noEmit"
   },
   "keywords": ["connectome", "websocket", "sdk", "web-axon"],
   "author": "Connectome Team",
