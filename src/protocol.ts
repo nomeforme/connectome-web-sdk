@@ -30,12 +30,29 @@ export interface ClientLeaveStream {
   streamId: string;
 }
 
+/**
+ * Client-side attachment shape. Bytes may be sent inline as base64 `data`,
+ * or omitted (metadata-only) for future direct-upload paths.
+ */
+export interface ClientAttachment {
+  /** MIME type (e.g. `text/plain`). Used by axon effectors to route the file. */
+  contentType?: string;
+  /** Original filename (extension used as fallback for content-type). */
+  filename?: string;
+  /** Byte length. */
+  size?: number;
+  /** Base64-encoded bytes. */
+  data?: string;
+}
+
 export interface ClientMessage {
   type: 'message';
   streamId: string;
   content: string;
   /** Bot names this message @-mentions (triggers activation) */
   mentions?: string[];
+  /** Optional file attachments carried with the message. */
+  attachments?: ClientAttachment[];
 }
 
 export interface ClientTyping {
@@ -62,6 +79,23 @@ export interface ClientSetAmbient {
   targetAgentId?: string;
 }
 
+/**
+ * React to a message. Currently a single-purpose channel — the connectome
+ * server only acts on `🫥` (U+1FAE5) reactions, which hide the target
+ * message from LLM context. Other emojis are accepted but ignored server-side
+ * (extension point for future reaction-driven behaviors).
+ *
+ * `facetId` is the VEIL facet ID of the target message (surfaced back to
+ * clients on `message_ack`). `added=false` removes the reaction.
+ */
+export interface ClientReact {
+  type: 'react';
+  streamId: string;
+  facetId: string;
+  emoji: string;
+  added: boolean;
+}
+
 export type ClientPayload =
   | ClientConnect
   | ClientCreateStream
@@ -71,7 +105,8 @@ export type ClientPayload =
   | ClientTyping
   | ClientGetHistory
   | ClientListStreams
-  | ClientSetAmbient;
+  | ClientSetAmbient
+  | ClientReact;
 
 // ─── Server → Client ─────────────────────────────────────────────────────────
 
@@ -100,6 +135,10 @@ export interface ServerSpeech {
   timestamp: number;
   /** True when the agent has more turns coming (still thinking) */
   cyclePending?: boolean;
+  /** VEIL facet ID for this speech — pass to `react` to target it. */
+  facetId?: string;
+  /** Attachments delivered alongside speech (blob refs / inline data / URLs). */
+  attachments?: any[];
 }
 
 export interface ServerTyping {
@@ -131,6 +170,8 @@ export interface ServerUserMessage {
   userName: string;
   content: string;
   timestamp: number;
+  /** VEIL facet ID for this message — pass to `react` to target it. */
+  facetId?: string;
 }
 
 export interface ServerMessageAck {
@@ -138,6 +179,8 @@ export interface ServerMessageAck {
   streamId: string;
   /** The VEIL sequence number assigned to this message */
   sequence: number;
+  /** VEIL facet ID assigned to the ack'd message — pass to `react` to target it. */
+  facetId?: string;
 }
 
 export interface HistoryMessage {
